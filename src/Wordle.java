@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.*;
 import java.util.Scanner;
 
 public class Wordle {
@@ -18,12 +18,27 @@ public class Wordle {
         int guess = wordSize + 1;
         String fileName = wordSize + "-letter-words.txt";
         File inFile = new File(fileName);
+        String word = generate(inFile).toLowerCase();
+        System.out.println(word);
         System.out.println("You have chosen to guess a " + wordSize + "-letter word. You have " + guess +
-                "guesses to guess the word.");
+                " guesses to guess the word.");
 
 
+    }
 
-
-
+    public static String generate(File inFile) {
+        try {
+            RandomAccessFile file = new RandomAccessFile(inFile, "r");
+            long location = (long) (Math.random() * file.length());
+            file.seek(location);
+            file.readLine();
+            String randomLine = file.readLine();
+            file.close();
+            return randomLine;
+        }
+        catch (IOException fnfe) {
+            System.out.println("File not found: " + inFile.toString());
+        }
+        return "File not found: " + inFile.toString();
     }
 }
