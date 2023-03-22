@@ -7,41 +7,40 @@ public class Wordle {
     final String RESET = "\u001b[0m";
     private int wordSize;
     private String word;
+    private int[] status;
     public Wordle(int wordSize) {
         this.wordSize = wordSize;
         String fileName = wordSize + "-letter-words.txt";
         File inFile = new File(fileName);
         word = generate(inFile).toLowerCase();
+        status = new int[wordSize];
 
-    }
-
-    public int getWordSize() {
-        return wordSize;
     }
 
     public String getWord() {
         return word;
     }
 
-    public int checkWord(String guess, int status[]) {
-        int score = 0;
-        for (int i = 0; i < wordSize - 1; i++) {
-            for (int j = 0; j < wordSize - 1; j++) {
+    public void checkWord(String guess) {
+        for (int i = 0; i < wordSize; i++) {
+            for (int j = 0; j < wordSize; j++) {
                 if (word.substring(i, i + 1).equals(guess.substring(j, j + 1))) {
                     if (i == j) {
-                        score += 2;
                         status[j] = 2;
-                        break;
                     }
-                    score++;
-                    status[j] = 1;
+                    else {
+                        status[j] = 1;
+                    }
                 }
             }
         }
-        return score;
     }
 
-
+    public void statusReset() {
+        for (int i = 0; i < wordSize; i++) {
+            status[i] = 0;
+        }
+    }
     public String generate(File inFile) {
         try {
             RandomAccessFile file = new RandomAccessFile(inFile, "r");
@@ -56,5 +55,14 @@ public class Wordle {
             System.out.println("File not found: " + inFile.toString());
         }
         return "File not found: " + inFile.toString();
+    }
+
+    public void print(String guess) {
+        for (int i = 0; i < wordSize; i++) {
+            if (status[i] == 2) System.out.print(GREEN + guess.substring(i, i + 1) + RESET);
+            else if (status[i] == 1) System.out.print(YELLOW + guess.substring(i, i + 1) + RESET);
+            else System.out.print(guess.substring(i, i + 1));
+        }
+        System.out.println();
     }
 }
