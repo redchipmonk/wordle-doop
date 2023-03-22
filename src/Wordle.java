@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.Scanner;
 
 public class Wordle {
     final String GREEN = "\u001b[42m";
@@ -23,13 +22,14 @@ public class Wordle {
 
     public void checkWord(String guess) {
         for (int i = 0; i < wordSize; i++) {
-            for (int j = 0; j < wordSize; j++) {
-                if (word.substring(i, i + 1).equals(guess.substring(j, j + 1))) {
-                    if (i == j) {
-                        status[j] = 2;
-                    }
-                    else {
-                        status[j] = 1;
+                if (word.substring(i, i + 1).equals(guess.substring(i, i + 1))) {
+                        status[i] = 2;
+                }
+                else {
+                    for (int j = 0; j < wordSize; j++) {
+                        if (i != j && word.substring(i, i + 1).equals(guess.substring(j, j +1))) {
+                            status[j] = 1;
+                            break;
                     }
                 }
             }
