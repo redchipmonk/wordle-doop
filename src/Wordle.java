@@ -5,28 +5,44 @@ public class Wordle {
     final String GREEN = "\u001b[42m";
     final String YELLOW = "\u001b[43m";
     final String RESET = "\u001b[0m";
-    public static void main(String[] args) {
-        System.out.println("Welcome to my Wordle Dupe!");
-        Scanner scan = new Scanner(System.in);
-        int wordSize = 0;
-        do {
-            System.out.print("Please input how many letter words you would like to guess: ");
-            wordSize = scan.nextInt();
-            System.out.println();
-        }
-        while (wordSize < 5 || wordSize > 8);
-        int guess = wordSize + 1;
+    private int wordSize;
+    private String word;
+    public Wordle(int wordSize) {
+        this.wordSize = wordSize;
         String fileName = wordSize + "-letter-words.txt";
         File inFile = new File(fileName);
-        String word = generate(inFile).toLowerCase();
-        System.out.println(word);
-        System.out.println("You have chosen to guess a " + wordSize + "-letter word. You have " + guess +
-                " guesses to guess the word.");
-
+        word = generate(inFile).toLowerCase();
 
     }
 
-    public static String generate(File inFile) {
+    public int getWordSize() {
+        return wordSize;
+    }
+
+    public String getWord() {
+        return word;
+    }
+
+    public int checkWord(String guess, int status[]) {
+        int score = 0;
+        for (int i = 0; i < wordSize - 1; i++) {
+            for (int j = 0; j < wordSize - 1; j++) {
+                if (word.substring(i, i + 1).equals(guess.substring(j, j + 1))) {
+                    if (i == j) {
+                        score += 2;
+                        status[j] = 2;
+                        break;
+                    }
+                    score++;
+                    status[j] = 1;
+                }
+            }
+        }
+        return score;
+    }
+
+
+    public String generate(File inFile) {
         try {
             RandomAccessFile file = new RandomAccessFile(inFile, "r");
             long location = (long) (Math.random() * file.length());
