@@ -4,15 +4,18 @@ public class Wordle {
     final String GREEN = "\u001b[42m";
     final String YELLOW = "\u001b[43m";
     final String RESET = "\u001b[0m";
+    final String GRAY = "\u001b[100m";
     private int wordSize;
     private String word;
     private int[] status;
+    private Keyboard keyboard;
     public Wordle(int wordSize) {
         this.wordSize = wordSize;
         String fileName = wordSize + "-letter-words.txt";
         File inFile = new File(fileName);
         word = generate(inFile).toLowerCase();
         status = new int[wordSize];
+        keyboard = new Keyboard();
 
     }
 
@@ -34,6 +37,7 @@ public class Wordle {
                 }
             }
         }
+        keyboard.update(guess, status);
     }
 
     public void statusReset() {
@@ -59,10 +63,11 @@ public class Wordle {
 
     public void print(String guess) {
         for (int i = 0; i < wordSize; i++) {
-            if (status[i] == 2) System.out.print(GREEN + guess.substring(i, i + 1) + RESET);
-            else if (status[i] == 1) System.out.print(YELLOW + guess.substring(i, i + 1) + RESET);
-            else System.out.print(guess.substring(i, i + 1));
+            if (status[i] == 2) System.out.print(GREEN + guess.charAt(i) + RESET);
+            else if (status[i] == 1) System.out.print(YELLOW + guess.charAt(i) + RESET);
+            else System.out.print(GRAY + guess.charAt(i) + RESET);
         }
         System.out.println();
+        keyboard.display();
     }
 }
