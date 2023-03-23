@@ -52,6 +52,7 @@ public class WordleClient {
         }
         if (won) System.out.println("You won!");
         else System.out.println(wordle.getWord() + "\nYou lost :(");
+        scan.close();
         System.exit(0);
     }
 }

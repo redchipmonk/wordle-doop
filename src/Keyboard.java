@@ -1,5 +1,3 @@
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 
 /**
@@ -35,7 +33,7 @@ public class Keyboard {
      * @param guess String guess
      * @param status int[] status array of guess
      */
-    public void update(String guess, int @NotNull [] status) {
+    public void update(String guess, int[] status) {
         for (int i = 0; i < status.length; i++) {
             //index of a keyboard based on alphabet - ex: a is the 0th of the alphabet, but 10th of qwerty keyboard
             int letter = indexes[(int)(guess.charAt(i)) - 97];
